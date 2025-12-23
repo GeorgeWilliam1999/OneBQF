@@ -71,19 +71,29 @@ class IBQF:
         """
         Hash function for the filter.
         
+        This is a placeholder implementation using Python's built-in hash.
+        For the full IBQF implementation, replace this with a quantum-inspired
+        hash function that provides:
+        - Uniform distribution across the filter space
+        - Low collision probability
+        - Quantum-inspired randomness properties
+        - Computational efficiency
+        
         Parameters
         ----------
         item : hashable
             Item to hash
         seed : int
-            Seed for the hash function
+            Seed for the hash function (enables multiple hash functions)
             
         Returns
         -------
         int
             Hash value
         """
-        # Simple hash function - replace with your quantum-inspired hash
+        # TODO: Replace with quantum-inspired hash function
+        # Consider using quantum random number generators or quantum-inspired
+        # distribution patterns for improved performance in particle tracking
         return hash((item, seed))
     
     def reset(self):
