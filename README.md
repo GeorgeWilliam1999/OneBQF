@@ -25,6 +25,7 @@ OneBQF/
 ├── plotting_notebooks/    # Jupyter notebooks for visualization and analysis
 │   ├── plot_fidelity_results.ipynb  # Fidelity visualization
 │   ├── plotting_complexity.ipynb    # Complexity analysis plots
+├   |── segement_analysis.ipynb      # Complexity analysis plots
 │   ├── combined_analysis_summary_fitted_exponents.json  # Fitted exponent data
 │   └── Plots/             # Generated plot outputs
 │
@@ -96,6 +97,60 @@ The analysis in `plotting_notebooks/plot_fidelity_results.ipynb` computes:
 - **Signal Separation Index (SSI)**: Ratio of mean track probability to mean noise probability
 - **Bootstrap error estimation**: 1000 bootstrap samples for confidence intervals
 
+### Simulation Toy: segment_analysis.ipynb
+
+The notebook `segment_analysis.ipynb` is responsible for all toy model analysis in this paper. It generates segment-level efficiency plots showing the Hamiltonian-based segment pairing performance.
+
+#### Quick Execution (Using Saved Data)
+
+If pre-generated data exists, the notebook loads it automatically (~5 seconds total):
+
+1. Run **Cell 1**: Setup and imports
+2. Run **Cell 70**: Configuration parameters
+3. Run **Cell 77**: Loads saved angle data from `runs_fixed_epsilon/fixed_epsilon_angle_data_v3.pkl`
+4. Run **Cell 82-83**: Compute segment efficiency metrics
+5. Run **Cell 84**: Generate final plot (Figure 3)
+
+#### Full Data Generation (From Scratch)
+
+To regenerate all data with full statistics (~30 minutes):
+
+1. Run **Cells 1-70**: Setup and configuration
+2. Delete or rename `runs_fixed_epsilon/fixed_epsilon_angle_data_v3.pkl` to force regeneration
+3. In **Cell 70**, set parameters:
+   - `N_REPEATS = 100` for full statistics
+   - `EVENT_COUNTS = list(range(1, 11))` for 20-200 tracks
+4. Run **Cell 77**: Generates segment angle data for all track densities
+5. Run **Cell 78-81**: (Optional) Additional repeats for specific configurations
+6. Run **Cells 82-84**: Compute metrics and generate final plot
+
+#### Configuration Parameters
+
+| Parameter | Default Value | Description |
+|-----------|---------------|-------------|
+| `FIXED_EPSILON` | 0.002 (2 mrad) | Segment angle threshold |
+| `FIXED_RESOLUTION` | 0.005 (5 µm) | Measurement resolution |
+| `FIXED_SCATTERING` | 0.0001 (0.1 mrad) | Multiple scattering |
+| `TRACKS_PER_EVENT` | 20 | Particles per event |
+| `EVENT_COUNTS` | [1, 2, ..., 10] | Events per configuration (20-200 tracks) |
+| `N_REPEATS` | 100 | Statistical repeats per configuration |
+
+#### Output Files
+
+- `fixed_epsilon_segment_efficiency.png` (300 DPI raster)
+- `fixed_epsilon_segment_efficiency.pdf` (600 DPI vector)
+- `runs_fixed_epsilon/fixed_epsilon_angle_data_v3.pkl` (cached data)
+
+#### Low-Statistics Test Run
+
+For quick validation (~1 minute), modify **Cell 70**:
+```python
+N_REPEATS = 3  # Reduced from 100
+EVENT_COUNTS = [1, 5, 10]  # Subset: 20, 100, 200 tracks only
+```
+
+Then run Cells 1, 70, 77, 82-84 sequentially.
+
 ### Metrics Collected
 
 - **Circuit Depth**: Total gate depth and two-qubit gate depth
@@ -111,6 +166,7 @@ The analysis in `plotting_notebooks/plot_fidelity_results.ipynb` computes:
 |--------|-------------|------------------|
 | Fig. 1 | Event display | `example.ipynb`, Cell 6 |
 | Fig. 2 | Circuit diagram | `example.ipynb`, Cell 13 |
+| Fig. 3 | Simulation Toy | `segment_analysis.ipynb`, Cell 84 |
 | Fig. 4 | Circuit depth | `plotting_notebooks/plotting_complexity.ipynb` |
 | Fig. 5 | Success probability | `plotting_notebooks/plot_fidelity_results.ipynb` |
 
